@@ -2,36 +2,54 @@ package main
 
 import "fmt"
 
-func max(value1, value2 int) int{
-	if value1 > value2{
-		return value1
-	}
-	return value2
-}
-
 func main() {
-	const yi = "cgata"
-	const xj = "tccata"
-	var table [len(yi) + 1][len(xj) + 1]int
-	
-	for i := 0; i< len(yi); i++{
-		for j := 0; j < len(xj); j++{
-			if i == 0 || j == 0{
-				table[i][j] = 0
-			}else{
-				if yi[i - 1] == xj[j - 1]{
-					table[i][j] = table[i-1][j-1] + 1
-				}else{
-					table[i][j] = max(table[i - 1][j], table[i][j - 1])
+	const wordone string = "cgata"
+	const wordtwo string = "tccata"
+
+	var matrix [len(wordone) + 1][len(wordtwo) + 1]int
+
+	for i := 0; i < len(wordone); i++ {
+		for j := 0; j < len(wordtwo); j++ {
+			if i == 0 || j == 0 {
+				matrix[i][j] = 0
+			} else {
+				if wordone[i - 1] == wordtwo[j - 1] {
+					matrix[i][j] = matrix[i-1][j-1] + 1
+				} else {
+					matrix[i][j] = max(matrix[i-1][j], matrix[i][j-1])
 				}
 			}
 		}
 	}
-	
-	for i := 0; i< len(yi); i++{
-		for j := 0; j < len(xj); j++{
-			fmt.Print(table[i][j])	
+
+	fmt.Println("SIMPLE")
+	for i := 0; i < len(wordone); i++ {
+		for j := 0; j < len(wordtwo); j++ {
+			fmt.Print(matrix[i][j])
 		}
 		fmt.Println()
 	}
+
+	// retorna a maior subsequencia comum
+
+	maxValue := 4
+	fmt.Println(maxValue)
+	// tamanho da maior sequencia comum entre as strings
+	i := len(wordone)
+	j := len(wordtwo)
+	lcs := make([]byte, maxValue)
+	for (i > 0 && j > 0) {
+		if wordone[i-1] == wordtwo[j-1] {
+			lcs[maxValue-1] = wordone[i-1]
+			i--
+			j--
+			maxValue--
+		}else if matrix[i-1][j] > matrix[i][j-1] {
+			i--
+		}else {
+			j--
+		}
+	}
+
+	fmt.Println(string(lcs))
 }
